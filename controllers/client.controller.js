@@ -53,13 +53,46 @@ export async function usersMe(req, res){
     const token = auth.replace("Bearer ","");
 
     try {
-    
-        if(!auth){
+
+        const session = (`select * from sessions where token= '${token}'`);
+
+        if(session.rowCount === 0){
             return res.sendStatus(401);
         }
 
-        
+        const user = (`select name from users where id= ${session.rows[0].userId}`);
 
+        const userUrls = (`select * from "shortenedUrls" where userId= ${session.rows[0].userId}`)
+
+        const visitCount = (`select count("visitCount") from "shortenedUrls" where userId= ${session.rows[0].userId}`)
+
+        const sendObject = {
+            id: session.rows[0].userId,
+            name: user.rows[0],
+            visitCount: visitCount,
+            shortenedUrls: [userUrls.rows.map((u) => ({
+                id: u.id,
+                shortUrl: u.shortUrl,
+                url: u.url,
+                visitCount: u.visitCount
+            }))]
+        }
+
+        return res.status(200).send(sendObject)
+
+    } catch (error) {
+        return res.status(500).send(console.log(err.message));
+    }
+}
+
+export async function ranking(req,res){
+
+    try {
+
+        const users = await db.query(`select id,name from users`);
+
+        
+        
     } catch (error) {
         return res.status(500).send(console.log(err.message));
     }
