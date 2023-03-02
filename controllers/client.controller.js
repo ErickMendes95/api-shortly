@@ -10,7 +10,7 @@ export async function signUp(req, res){
         
         const userExist = await db.query(`select * from users where email= '${user.email}'`)
 
-        if(userExist){
+        if(userExist.rowCount === 1){
             return res.status(409).send("usuário já cadastrado")
         }
 
