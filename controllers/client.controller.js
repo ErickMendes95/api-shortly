@@ -76,7 +76,7 @@ export async function usersMe(req, res){
         const sendObject = {
             id: user.rows[0].id,
             name: user.rows[0].name,
-            visitCount: visitCount,
+            visitCount: visitCount.rows[0],
             shortenedUrls: array
         }
 
