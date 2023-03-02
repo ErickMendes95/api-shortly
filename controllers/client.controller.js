@@ -38,7 +38,7 @@ export async function signIn(req, res){
             return res.status(401).send("usuário/senha incorretos");
         }
 
-        await db.query(`insert into sessions ("userId",token) values ('${userExist.rows[0].id}','${token}')`);
+        await db.query(`insert into session ("userId",token) values ('${userExist.rows[0].id}','${token}')`);
 
         return res.status(200).send(token);
 
@@ -54,7 +54,7 @@ export async function usersMe(req, res){
 
     try {
 
-        const session = (`select * from sessions where token= '${token}'`);
+        const session = (`select * from session where token= '${token}'`);
 
         if(session.rowCount === 0){
             return res.sendStatus(401);
