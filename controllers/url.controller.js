@@ -16,9 +16,9 @@ export async function urlShorten(req,res){
             return res.sendStatus(401);
         }
         
-        await db.query(`insert into "shortenedUrls" ("userId",url,"shortUrl","visitCount") values ('${user.rows[0].userId}','${url}','${shortUrl},0)`);
+        await db.query(`insert into "shortenedUrls" ("userId",url,"shortUrl","visitCount") values ('${user.rows[0].userId}','${url}','${shortUrl}',0)`);
         
-        const sendObject = await db.query(`select id,"shortUrl" from "shortenedUrls" where "shortUrl"= '${shortUrl}`);
+        const sendObject = await db.query(`select id,"shortUrl" from "shortenedUrls" where "shortUrl"= '${shortUrl}'`);
 
         return res.status(201).send(sendObject.rows[0]);
 
