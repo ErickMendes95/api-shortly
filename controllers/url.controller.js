@@ -59,7 +59,7 @@ export async function openUrl(req,res){
 
     try {
 
-        const url = (`select * from "shortenedUrls" where "shortUrl"= '${shortUrl}'`)
+        const url = await db.query(`select * from "shortenedUrls" where "shortUrl"= '${shortUrl}'`)
 
         if(url.rowCount === 0){
             return res.sendStatus(404)

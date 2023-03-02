@@ -54,17 +54,17 @@ export async function usersMe(req, res){
 
     try {
 
-        const session = (`select * from session where token= '${token}'`);
+        const session = await db.query(`select * from session where token= '${token}'`);
 
         if(session.rowCount === 0){
             return res.sendStatus(401);
         }
 
-        const user = (`select * from users where id= '${session.rows[0].userId}'`);
+        const user = await db.query(`select * from users where id= '${session.rows[0].userId}'`);
 
-        const userUrls = (`select * from "shortenedUrls" where "userId"= '${user.rows[0].id}' order by "shortenedUrls".id`)
+        const userUrls = await db.query(`select * from "shortenedUrls" where "userId"= '${user.rows[0].id}' order by "shortenedUrls".id`)
 
-        const visitCount = (`select SUM("visitCount") from "shortenedUrls" where "userId"= '${user.rows[0].id}'`)
+        const visitCount = await db.query(`select SUM("visitCount") from "shortenedUrls" where "userId"= '${user.rows[0].id}'`)
 
         const array = userUrls.rows.map((u) => ({
                 id: u.id,
@@ -72,7 +72,7 @@ export async function usersMe(req, res){
                 url: u.url,
                 visitCount: u.visitCount
             }))
-            
+
         const sendObject = {
             id: user.rows[0].id,
             name: user.rows[0].name,
