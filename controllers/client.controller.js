@@ -97,7 +97,7 @@ export async function ranking(req,res){
         SUM("shortenedUrls"."visitCount") AS "visitCount" 
         from users left join "shortenedUrls" on "shortenedUrls"."userId"= users.id
         group by users.id 
-        order by visit_count desc limit 10`);
+        order by "visitCount" desc limit 10`);
 
         res.status(200).send(users.rows);
         
