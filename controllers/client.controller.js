@@ -40,7 +40,7 @@ export async function signIn(req, res){
 
         await db.query(`insert into session ("userId",token) values ('${userExist.rows[0].id}','${token}')`);
 
-        return res.status(200).send(token);
+        return res.status(200).send({token});
 
     } catch (error) {
         return res.status(500).send(console.log(err.message));
