@@ -38,7 +38,7 @@ export async function signIn(req, res){
             return res.status(401).send("usuário/senha incorretos");
         }
 
-        await db.query(`insert into sessions (userId,token) values ('${userExist.rows[0].id}','${token}')`);
+        await db.query(`insert into sessions ("userId",token) values ('${userExist.rows[0].id}','${token}')`);
 
         return res.status(200).send(token);
 
@@ -62,9 +62,9 @@ export async function usersMe(req, res){
 
         const user = (`select name from users where id= ${session.rows[0].userId}`);
 
-        const userUrls = (`select * from "shortenedUrls" where userId= ${session.rows[0].userId}`)
+        const userUrls = (`select * from "shortenedUrls" where "userId"= ${session.rows[0].userId}`)
 
-        const visitCount = (`select count("visitCount") from "shortenedUrls" where userId= ${session.rows[0].userId}`)
+        const visitCount = (`select count("visitCount") from "shortenedUrls" where "userId"= ${session.rows[0].userId}`)
 
         const sendObject = {
             id: session.rows[0].userId,
@@ -89,9 +89,11 @@ export async function ranking(req,res){
 
     try {
 
-        const users = await db.query(`select id,name from users`);
+        const users = await db.query(`select users.id,users.name,"shortenedUrls".count("userId") AS "linksCount",
+        "shortenedUrls".count("visitCount") AS "visitCount" from users left join "shortenedUrls" on "userId"= users.id
+        order by visit_count desc limit 10`);
 
-        
+        res.status(200).send(users.rows);
         
     } catch (error) {
         return res.status(500).send(console.log(err.message));

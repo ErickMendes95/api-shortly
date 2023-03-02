@@ -17,7 +17,7 @@ export async function urlShorten(req,res){
             return res.sendStatus(401);
         }
         
-        await db.query(`insert into "shortenedUrls" (userId,url,"shortUrl",visitCount) values ('${sessions.rows[0].userId}','${url}','${shortUrl},0)`);
+        await db.query(`insert into "shortenedUrls" ("userId",url,"shortUrl","visitCount") values ('${sessions.rows[0].userId}','${url}','${shortUrl},0)`);
         const urlId = await db.query(`select id from "shortenedUrls" where "shortUrl"= '${shortUrl}`);
 
         const sendObject = {
@@ -70,9 +70,9 @@ export async function openUrl(req,res){
             return res.sendStatus(404)
         }
 
-        const visitCount = url.rows[0].visitCount + 1;
+        const visitcount = url.rows[0].visitCount + 1;
 
-        await db.query(`update "shortenedUrls" set visitCount = '${visitCount}' where id= '${url.rows[0].id}'`)
+        await db.query(`update "shortenedUrls" set "visitCount" = '${visitcount}' where id= '${url.rows[0].id}'`)
 
         return res.redirect(`${url.rows[0].url}`);
 
