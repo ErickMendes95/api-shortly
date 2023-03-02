@@ -84,7 +84,7 @@ export async function deleteUrl(req,res){
 
     try {
         
-        const user = await db.query(`select * from sessions where token= '${token}'`);
+        const user = await db.query(`select * from session where token= '${token}'`);
         
         if(user.rowCount === 0){
             return res.sendStatus(401);
