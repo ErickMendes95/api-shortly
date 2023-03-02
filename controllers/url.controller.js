@@ -86,11 +86,11 @@ export async function deleteUrl(req,res){
         
         const user = await db.query(`select * from sessions where token= '${token}'`);
         
-        if(!user.rowCount === 0){
+        if(user.rowCount === 0){
             return res.sendStatus(401);
         }
 
-        const url = (`select * from "shortenedUrls" where id= '${id}'`);
+        const url = await db.query(`select * from "shortenedUrls" where id= '${id}'`);
 
         if(url.rowCount === 0){
             return res.sendStatus(404)
@@ -99,7 +99,6 @@ export async function deleteUrl(req,res){
             return res.sendStatus(401);
         }
         
-
         await db.query(`delete from "shortenedUrls" where id= '${id}'`)
 
         return res.sendStatus(204);
