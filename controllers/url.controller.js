@@ -5,27 +5,22 @@ export async function urlShorten(req,res){
 
     const auth = req.headers.authorization;
     const token = auth.replace('Bearer ','');
-    const url = req.body
+    const {url} = req.body
     const shortUrl = nanoid(12);
 
     try {
 
         const user = await db.query(`select * from session where token= '${token}'`)
         
-        if(!user.rowCount === 0){
+        if(user.rowCount === 0){
             return res.sendStatus(401);
         }
         
-        await db.query(`insert into "shortenedUrls" ("userId",url,"shortUrl","visitCount") values ('${user.rows[0].userId}','${url.url}','${shortUrl},0)`);
+        await db.query(`insert into "shortenedUrls" ("userId",url,"shortUrl","visitCount") values ('${user.rows[0].userId}','${url}','${shortUrl},0)`);
         
-        const urlId = await db.query(`select id from "shortenedUrls" where "shortUrl"= '${shortUrl}`);
+        const sendObject = await db.query(`select id,"shortUrl" from "shortenedUrls" where "shortUrl"= '${shortUrl}`);
 
-        const sendObject = {
-            id: urlId.rows[0].id,
-            shortUrl: shortUrl
-        }
-
-        return res.status(201).send(sendObject);
+        return res.status(201).send(sendObject.rows[0]);
 
     } catch (error) {
         return res.status(500).send(console.log(error.message));
