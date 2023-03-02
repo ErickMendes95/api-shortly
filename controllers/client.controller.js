@@ -60,15 +60,15 @@ export async function usersMe(req, res){
             return res.sendStatus(401);
         }
 
-        const user = (`select name from users where id= ${session.rows[0].userId}`);
+        const user = (`select * from users where id= '${session.rows[0].userId}'`);
 
-        const userUrls = (`select * from "shortenedUrls" where "userId"= ${session.rows[0].userId}`)
+        const userUrls = (`select * from "shortenedUrls" where "userId"= '${user.rows[0].id}'`)
 
-        const visitCount = (`select count("visitCount") from "shortenedUrls" where "userId"= ${session.rows[0].userId}`)
+        const visitCount = (`select SUM("visitCount") from "shortenedUrls" where "userId"= '${user.rows[0].id}'`)
 
         const sendObject = {
-            id: session.rows[0].userId,
-            name: user.rows[0],
+            id: user.rows[0].id,
+            name: user.rows[0].name,
             visitCount: visitCount,
             shortenedUrls: [userUrls.rows.map((u) => ({
                 id: u.id,
