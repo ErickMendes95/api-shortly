@@ -94,8 +94,7 @@ CREATE TABLE public.users (
     id integer NOT NULL,
     name character varying(255) NOT NULL,
     password character varying(255) NOT NULL,
-    email character varying(255) NOT NULL,
-    createdat timestamp without time zone DEFAULT now()
+    email character varying(255) NOT NULL
 );
 
 
@@ -217,14 +216,6 @@ ALTER TABLE ONLY public."shortenedUrls"
 
 ALTER TABLE ONLY public.users
     ADD CONSTRAINT users_email_key UNIQUE (email);
-
-
---
--- Name: users users_name_key; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.users
-    ADD CONSTRAINT users_name_key UNIQUE (name);
 
 
 --
