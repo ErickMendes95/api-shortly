@@ -34,7 +34,7 @@ export async function signIn(req, res){
         
         const userExist = await db.query(`select * from users where email= '${user.email}'`);
 
-        if(userExist.rowCount === 0 || (bcrypt.compareSync(user.password,userExist.rows[0].password))){
+        if(userExist.rowCount === 0 || bcrypt.compareSync(user.password,userExist.rows[0].password) === false){
             return res.status(401).send("usuário/senha incorretos");
         }
 
