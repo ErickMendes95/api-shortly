@@ -91,8 +91,12 @@ export async function ranking(req,res){
 
     try {
 
-        const users = await db.query(`select users.id,users.name,"shortenedUrls".count("userId") AS "linksCount",
-        "shortenedUrls".count("visitCount") AS "visitCount" from users left join "shortenedUrls" on "userId"= users.id
+        const users = await db.query(`
+        
+        select users.id,users.name,count("shortenedUrls"."userId") AS "linksCount",
+        SUM("shortenedUrls"."visitCount") AS "visitCount" 
+        from users left join "shortenedUrls" on "shortenedUrls"."userId"= users.id
+        group by users.id 
         order by visit_count desc limit 10`);
 
         res.status(200).send(users.rows);
