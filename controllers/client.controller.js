@@ -70,12 +70,12 @@ export async function usersMe(req, res){
             id: user.rows[0].id,
             name: user.rows[0].name,
             visitCount: visitCount,
-            shortenedUrls: [userUrls.rows.map((u) => ({
+            shortenedUrls: userUrls.rows.map((u) => ({
                 id: u.id,
                 shortUrl: u.shortUrl,
                 url: u.url,
                 visitCount: u.visitCount
-            }))]
+            }))
         }
 
         return res.status(200).send(sendObject)
